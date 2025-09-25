@@ -1,84 +1,104 @@
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { View, Text, StyleSheet,ScrollView,Image} from "react-native";
+import { View, Text, StyleSheet, ScrollView, Image, ImageSourcePropType, TouchableOpacity } from "react-native";
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../types/navigation';
+import { colors, spacing, typography } from '../styles/common';
 import Achiev from "./Achiev";
 
-export default function TrackTrip() {
-    return(
-        <SafeAreaView style={{backgroundColor: "#a3e4fbff", flex: 1}}>
-            <ScrollView>
-           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                <View style = {styles.container1}>
-                    <View style ={styles.boxHeader}>
-                       <Image source={require('../assets/distance1.png')} 
-                            style = {styles.img}
-                       />
-                        <View style = {styles.text1}>
-                            <Text style = {{fontSize: 16,color:"gray"}}>Total Distance</Text>
-                            <Text style = {{fontSize: 24}}>0.0 KM</Text> {/*data from user */}
-                        </View>
-                    </View>
-                    <View style ={styles.boxHeader}>
-                        <Image
-                            source ={require("../assets/timer.png")}
-                            style = {styles.img}
-                        />
-                        <View style = {styles.text1}>
-                            <Text style = {{fontSize: 16,color:"gray"}}>Total Time</Text>
-                            <Text style = {{fontSize: 24}}>0.0 HRS</Text> {/*calulate from start time and end time */}
-                        </View>
-                    </View>
-                    <View style ={styles.boxHeader}>
-                        <Image
-                            source ={require("../assets/destination1.png")}
-                            style = {styles.img}
-                        />
-                        <View style = {styles.text1}>
-                            <Text style = {{fontSize: 16,color:"gray"}}>current destination</Text>
-                            <Text style = {{fontSize: 24}}>xyz</Text> {/*data from user */}
-                        </View>
-                    </View>
-                </View>
-           </ScrollView>
-            <ScrollView>
-                <View style = {styles.container2}>
-                    <Text style={{marginLeft:27, fontSize: 20, fontWeight: "bold"}}>Recent Trips</Text>
-                    <Text style={{marginLeft:27}}>Log your journey</Text>
-                    <View style={{alignItems:"center", justifyContent:"center",marginTop:50}}>
-                        <Image
-                            source ={require("../assets/steps.jpg")}
-                            style = {{width:90, height:80,  marginTop:20, borderRadius:50}}
-                        />
-                        <Text style={{textAlign:"center", fontSize:16, marginTop:20, marginBottom:20,color:"gray"}}>No recent trips logged</Text>
-                    </View>
-                </View>
-            </ScrollView>
-            <View style = {styles.container3}>
-                <View style={{margin:15, gap:10,flexDirection:"row"}}>
-                    <Image source={require('../assets/achievement/trophy.png')} 
-                        style = {{width:30, height:40}}
-                    />
-                    <Text style={{fontSize: 20, fontWeight: "bold"}}>Your Achievements</Text>
-                </View>
-                <ScrollView horizontal showsHorizontalScrollIndicator={false} >
-                    <View style ={styles.boxLower}>
-                        <Text style={{fontSize: 16, fontWeight: "bold"}}>Streak</Text>
-                    </View>
-                    <Achiev/>
-                </ScrollView>
+type TrackTripScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'TrackTrip'>;
+
+interface TrackTripProps {
+  navigation: TrackTripScreenNavigationProp;
+}
+
+interface StatBoxProps {
+  icon: ImageSourcePropType;
+  title: string;
+  value: string;
+}
+
+const StatBox: React.FC<StatBoxProps> = ({ icon, title, value }) => (
+  <View style={styles.boxHeader}>
+    <Image source={icon} style={styles.img} resizeMode="contain" />
+    <View style={styles.text1}>
+      <Text style={styles.statText}>{title}</Text>
+      <Text style={styles.valueText}>{value}</Text>
+    </View>
+  </View>
+);
+
+export default function TrackTrip({ navigation }: TrackTripProps) {
+  const handleLogTrip = () => {
+    navigation.navigate('LogTrip');
+  };
+  return (
+    <SafeAreaView style={styles.safeArea}>
+      <ScrollView>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          <View style={styles.container1}>
+            <StatBox
+              icon={require('../assets/distance1.png')}
+              title="Total Distance"
+              value="0.0 KM"
+            />
+            <StatBox
+              icon={require('../assets/timer.png')}
+              title="Total Time"
+              value="0.0 HRS"
+            />
+            <StatBox
+              icon={require('../assets/destination1.png')}
+              title="Current Destination"
+              value="xyz"
+            />
+          </View>
+        </ScrollView>
+        <ScrollView>
+          <View style={styles.container2}>
+            <Text style={styles.sectionTitle}>Recent Trips</Text>
+            <Text style={styles.sectionSubtitle}>Log your journey</Text>
+            <TouchableOpacity style={styles.noTripsContainer} onPress={handleLogTrip}>
+              <Image
+                source={require('../assets/steps.jpg')}
+                style={styles.tripImage}
+              />
+              <Text style={styles.noTripsText}>No recent trips logged</Text>
+              <Text style={styles.tapToLogText}>Tap to log a new trip</Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+        <View style={styles.container3}>
+          <View style={styles.achievementsHeader}>
+            <Image 
+              source={require('../assets/achievement/trophy.png')}
+              style={styles.trophyIcon}
+            />
+            <Text style={styles.achievementTitle}>Your Achievements</Text>
+          </View>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            <View style={styles.boxLower}>
+              <Text style={styles.achievementTitle}>Streak</Text>
             </View>
+            <Achiev />
+          </ScrollView>
+        </View>
             </ScrollView>
         </SafeAreaView>
     )
 }
 const styles = StyleSheet.create({
+    safeArea: {
+        flex: 1,
+        backgroundColor: colors.background
+    },
     container1: {
-        marginTop: 40,
-        marginHorizontal: 20,
-        marginVertical: 20,
+        marginTop: spacing.xl,
+        marginHorizontal: spacing.lg,
+        marginVertical: spacing.lg,
         flexDirection: "row",
         justifyContent: "space-between",
-        gap: 10,
+        gap: spacing.md,
         height: 120,
     },
     boxHeader: {
@@ -86,43 +106,96 @@ const styles = StyleSheet.create({
         height: 100,
         width: 250,
         borderRadius: 10,
-        flexDirection:"row"
+        flexDirection: "row",
+        padding: 10,
+        alignItems: "center"
     },
-    img:{
-        width:80,
-        height:80,
-        marginTop:10,
-        borderRadius:50
+    img: {
+        width: 80,
+        height: 80,
+        borderRadius: 50
     },
-    text1:{
-        margin:15,
-        gap:10
+    text1: {
+        marginLeft: 15,
+        gap: 5
     },
-    container2:{
-        marginHorizontal:20,
-       backgroundColor:"#e6e8eaff",
-       borderRadius:7,
-        padding:10,
-        height:500,
+    statText: {
+        fontSize: 16,
+        color: "gray"
     },
-    container3:{
+    valueText: {
+        fontSize: 24,
+        fontWeight: "500"
+    },
+    container2: {
+        marginHorizontal: 20,
+        backgroundColor: "#e6e8eaff",
+        borderRadius: 7,
+        padding: 10,
+        height: 500,
+    },
+    container3: {
         marginTop: 20,
         marginHorizontal: 20,
         marginVertical: 20,
         gap: 10,
-        backgroundColor:"#e6e8eaff",
-        height:190,
-        width:370,
-        borderRadius:7,
+        backgroundColor: "#e6e8eaff",
+        height: 190,
+        width: 370,
+        borderRadius: 7,
     },
     boxLower: {
         backgroundColor: "white",
         height: 100,
         width: 100,
-        marginLeft:20,
+        marginLeft: 20,
         borderRadius: 50,
-        alignItems:"center",
-        justifyContent:"center",
+        alignItems: "center",
+        justifyContent: "center",
         elevation: 3,
+    },
+    sectionTitle: {
+        fontSize: 20,
+        fontWeight: "bold",
+        marginLeft: 27
+    },
+    sectionSubtitle: {
+        marginLeft: 27
+    },
+    noTripsContainer: {
+        alignItems: "center",
+        justifyContent: "center",
+        marginTop: 50
+    },
+    tripImage: {
+        width: 90,
+        height: 80,
+        marginTop: 20,
+        borderRadius: 50
+    },
+    noTripsText: {
+        ...typography.body,
+        textAlign: "center",
+        marginTop: spacing.lg,
+        color: colors.textLight
+    },
+    tapToLogText: {
+        ...typography.body,
+        color: colors.primary,
+        marginTop: spacing.sm
+    },
+    achievementsHeader: {
+        margin: 15,
+        gap: 10,
+        flexDirection: "row",
+        alignItems: "center"
+    },
+    trophyIcon: {
+        width: 30,
+        height: 40
+    },
+    achievementTitle: {
+        fontSize: 20,
+        fontWeight: "bold"
     }
 })

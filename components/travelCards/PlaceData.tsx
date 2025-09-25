@@ -1,4 +1,5 @@
 import { ImageSourcePropType } from "react-native";
+import { DESTINATION_IMAGES } from "../../constants/assets";
 
 export interface Place {
   id: number;
@@ -10,43 +11,43 @@ export const PlaceData: Place[] = [
   {
     id: 1,
     name: "Alleppey Backwaters",
-    image: require("../../assets/KBoat.jpg"), 
+    image: DESTINATION_IMAGES.alleppeyBackwaters,
   },
   {
     id: 2,
     name: "Munnar Hills",
-    image: require("../../assets/Munnar_hills.jpg"),
+    image: DESTINATION_IMAGES.munnarHills,
   },
   {
-    id:3,
-    name:"Jatayu Nature Park",
-    image:require("../../assets/jatayu_park.jpg")
+    id: 3,
+    name: "Jatayu Nature Park",
+    image: DESTINATION_IMAGES.jatayuPark,
   },
   {
-    id:4,
-    name:"Kochi Fort",
-    image:require("../../assets/Kochi_Fort.jpg")
-    },
-    {
-        id:5,
-        name:"Kovalam Beach",
-        image:require("../../assets/kovalam.jpg")
-    },
-    {
-        id:6,
-        name:"Kumarakom",
-        image:require("../../assets/kumarakom.jpg")
-    },
-    {
-        id:7,
-        name:"Sree Padmanabhaswamy Temple",
-        image:require("../../assets/Sree-Padmanabhaswamy-Temple.jpg")
-    },
-    {
-        id:8,
-        name:"Thekkady",
-        image:require("../../assets/Thekkady.jpg")
-    },
+    id: 4,
+    name: "Kochi Fort",
+    image: DESTINATION_IMAGES.kochiFort,
+  },
+  {
+    id: 5,
+    name: "Kovalam Beach",
+    image: DESTINATION_IMAGES.kovalamBeach,
+  },
+  {
+    id: 6,
+    name: "Kumarakom",
+    image: DESTINATION_IMAGES.kumarakom,
+  },
+  {
+    id: 7,
+    name: "Sree Padmanabhaswamy Temple",
+    image: DESTINATION_IMAGES.padmanabhaSwamiTemple,
+  },
+  {
+    id: 8,
+    name: "Thekkady",
+    image: DESTINATION_IMAGES.thekkady,
+  },
     {
         id:9,
         name:"vagamon",

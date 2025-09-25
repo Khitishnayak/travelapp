@@ -1,37 +1,38 @@
 import { ImageSourcePropType } from "react-native";
+import { ACHIEVEMENT_ICONS } from "../constants/assets";
 
-export interface medal {
+export interface Medal {
   id: number;
   name: string;
   image: ImageSourcePropType;
-achieved: boolean;
+  achieved: boolean;
 }
 
-export const MedalData: medal[] = [
-    {
-        id:1,
-        name:"Explorer",
-        image:require("../assets/achievement/expo.png"),
-        achieved: true,
-    },
-    {
-        id:2,
-        name:"First Step",
-        image:require("../assets/achievement/firststep.jpg"),
-        achieved: true,
-    },
-    {
-        id:3,
-        name:"adventurer",
-        image:require("../assets/achievement/adven.png"),
-        achieved: true,
-    },
-    {
-        id:4,
-        name:"cyclist",
-        image:require("../assets/achievement/cycling.png"),
-        achieved: true,
-    },
+export const MedalData: Medal[] = [
+  {
+    id: 1,
+    name: "Explorer",
+    image: ACHIEVEMENT_ICONS.explorer,
+    achieved: true,
+  },
+  {
+    id: 2,
+    name: "First Step",
+    image: ACHIEVEMENT_ICONS.firstStep,
+    achieved: true,
+  },
+  {
+    id: 3,
+    name: "Adventurer",
+    image: ACHIEVEMENT_ICONS.adventurer,
+    achieved: true,
+  },
+  {
+    id: 4,
+    name: "Cyclist",
+    image: ACHIEVEMENT_ICONS.cyclist,
+    achieved: true,
+  },
     // {
     //     id:5,
     //     name:"100 KM Milestone",

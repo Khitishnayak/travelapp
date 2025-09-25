@@ -1,7 +1,18 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 
-export default function WelcomeScreen({ navigation }: any) {
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+
+type WelcomeScreenNavigationProp = NativeStackNavigationProp<{
+  Login: undefined;
+  Signup: undefined;
+}>;
+
+interface WelcomeScreenProps {
+  navigation: WelcomeScreenNavigationProp;
+}
+
+export default function WelcomeScreen({ navigation }: WelcomeScreenProps) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Welcome</Text>
@@ -17,9 +28,38 @@ export default function WelcomeScreen({ navigation }: any) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "#fff" },
-  title: { fontSize: 28, fontWeight: "bold", marginBottom: 10 },
-  subtitle: { fontSize: 16, marginBottom: 30 },
-  button: { backgroundColor: "#6C63FF", padding: 15, borderRadius: 25 },
-  buttonText: { color: "#fff", fontWeight: "bold" },
+  container: { 
+    flex: 1, 
+    justifyContent: "center", 
+    alignItems: "center", 
+    backgroundColor: "#a3e4fbff", // Match app theme
+    padding: 20
+  },
+  title: { 
+    fontSize: 32, 
+    fontWeight: "bold", 
+    marginBottom: 10,
+    color: "#3e636bff" // Match app theme
+  },
+  subtitle: { 
+    fontSize: 18, 
+    marginBottom: 40,
+    color: "#555"
+  },
+  button: { 
+    backgroundColor: "#3e636bff", // Match app theme
+    paddingVertical: 15,
+    paddingHorizontal: 30,
+    borderRadius: 25,
+    elevation: 3,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84
+  },
+  buttonText: { 
+    color: "#fff", 
+    fontWeight: "bold",
+    fontSize: 16
+  },
 });

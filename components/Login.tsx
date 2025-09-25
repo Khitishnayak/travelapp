@@ -6,111 +6,159 @@ import {
   TouchableOpacity,
   StyleSheet,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../types/navigation';
+import { colors, spacing, typography, commonStyles } from '../styles/common';
 
-export default function LoginScreen() {
+type LoginScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Login'>;
+
+interface LoginScreenProps {
+  navigation: LoginScreenNavigationProp;
+}
+
+export default function LoginScreen({ navigation }: LoginScreenProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (!email || !password) {
-      Alert.alert("Error", "Please enter email and password");
+      Alert.alert("Error", "Please fill in all fields");
       return;
     }
-    // 🚀 Add your authentication logic here
-    Alert.alert("Success", `Welcome ${email}`);
+
+    try {
+      setIsLoading(true);
+      // TODO: Add actual authentication logic here
+      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
+      navigation.replace('TrackTrip');
+    } catch (error) {
+      Alert.alert("Error", "Login failed. Please try again.");
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Log In</Text>
+    <SafeAreaView style={[commonStyles.container, styles.container]}>
+      <View style={styles.content}>
+        <Text style={styles.title}>Welcome Back</Text>
+        <Text style={styles.subtitle}>Log in to continue</Text>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        placeholderTextColor="#999"
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-      />
+        <View style={styles.form}>
+          <TextInput
+            style={commonStyles.input}
+            placeholder="Email"
+            placeholderTextColor={colors.textLight}
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+            autoCapitalize="none"
+            editable={!isLoading}
+          />
 
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        placeholderTextColor="#999"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
+          <TextInput
+            style={commonStyles.input}
+            placeholder="Password"
+            placeholderTextColor={colors.textLight}
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+            editable={!isLoading}
+          />
 
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Login</Text>
-      </TouchableOpacity>
+          <TouchableOpacity
+            style={[commonStyles.button, isLoading && styles.buttonDisabled]}
+            onPress={handleLogin}
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <ActivityIndicator color={colors.white} />
+            ) : (
+              <Text style={commonStyles.buttonText}>Log In</Text>
+            )}
+          </TouchableOpacity>
+        </View>
 
-      <TouchableOpacity>
-        <Text style={styles.link}>Forgot Password?</Text>
-      </TouchableOpacity>
-
-      <View style={styles.signupContainer}>
-        <Text>Don’t have an account? </Text>
-        <TouchableOpacity>
-          <Text style={styles.signupText}>Sign Up</Text>
+        <TouchableOpacity 
+          style={styles.forgotPassword}
+          onPress={() => Alert.alert('Coming Soon', 'Password reset functionality will be available soon.')}
+          disabled={isLoading}
+        >
+          <Text style={styles.link}>Forgot Password?</Text>
         </TouchableOpacity>
+
+        <View style={styles.signupContainer}>
+          <Text style={styles.signupText}>Don't have an account? </Text>
+          <TouchableOpacity 
+            onPress={() => navigation.navigate('Signup')}
+            disabled={isLoading}
+          >
+            <Text style={styles.signupLink}>Sign Up</Text>
+          </TouchableOpacity>
+        </View>
       </View>
+
+      {isLoading && (
+        <View style={commonStyles.loadingOverlay}>
+          <ActivityIndicator size="large" color={colors.primary} />
+        </View>
+      )}
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: colors.background,
+  },
+  content: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    paddingHorizontal: 20,
-    backgroundColor: "#85d9faff",
+    justifyContent: 'center',
+    paddingHorizontal: spacing.lg,
+    paddingBottom: spacing.xxl,
   },
   title: {
-    fontSize: 28,
-    fontWeight: "bold",
-    marginBottom: 30,
-    color: "#333",
+    ...typography.header,
+    marginBottom: spacing.xs,
+    textAlign: 'center',
   },
-  input: {
-    width: "100%",
-    height: 50,
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 10,
-    paddingHorizontal: 15,
-    marginBottom: 15,
-    backgroundColor: "white",
+  subtitle: {
+    ...typography.subtitle,
+    marginBottom: spacing.xl,
+    textAlign: 'center',
   },
-  button: {
-    width: "100%",
-    height: 50,
-    backgroundColor: "#42adf5ff",
-    borderRadius: 10,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 10,
+  form: {
+    width: '100%',
+    marginBottom: spacing.lg,
   },
-  buttonText: {
-    color: "white",
-    fontSize: 18,
-    fontWeight: "bold",
+  buttonDisabled: {
+    opacity: 0.7,
+  },
+  forgotPassword: {
+    alignSelf: 'center',
+    marginBottom: spacing.xl,
   },
   link: {
-    marginTop: 15,
-    color: "#007BFF",
-    fontSize: 14,
+    ...typography.body,
+    color: colors.primary,
+    textDecorationLine: 'underline',
   },
   signupContainer: {
-    flexDirection: "row",
-    marginTop: 20,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   signupText: {
-    color: "#007BFF",
-    fontWeight: "bold",
+    ...typography.body,
+  },
+  signupLink: {
+    ...typography.body,
+    color: colors.primary,
+    fontWeight: 'bold',
   },
 });
